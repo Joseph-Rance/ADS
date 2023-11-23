@@ -1,2 +1,4 @@
-# Place config informatio you want everyone to have here.
-data_url: https://raw.githubusercontent.com/lawrennd/datasets_mirror/main/
+database_username: admin
+database_password: adsisverycool
+database_url: database-ads-jr879-assessment.cgrre17yxw11.eu-west-2.rds.amazonaws.com
+database_port: 3306
