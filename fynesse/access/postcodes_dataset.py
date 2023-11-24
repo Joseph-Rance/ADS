@@ -46,7 +46,7 @@ def load_data(connection):
     with zipfile.ZipFile("open_postcode_geo.csv.zip", "r") as z:
         z.extractall("open_postcode_geo.csv")
     with connection.cursor() as cursor:
-        cursor.execute("LOAD DATA LOCAL INFILE 'open_postcode_geo.csv' \
+        cursor.execute("LOAD DATA LOCAL INFILE 'open_postcode_geo.csv/open_postcode_geo.csv' \
                         INTO TABLE `postcode_data` \
                         FIELDS TERMINATED BY ',' \
                         OPTIONALLY ENCLOSED by '\"' \

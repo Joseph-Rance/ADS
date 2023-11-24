@@ -47,7 +47,7 @@ class SQLConnection:  # connection object stores credentials so
             cls.instance = cls()
         return cls.instance
 
-def connect(f):  # decorator passes in the global connection
+def connect(f):  # decorator passes the global connection to the inner function
     def inner(*args, **kwargs):
         connection = SQLConnection.get_instance()
         return f(connection.get(), *args, **kwargs)
