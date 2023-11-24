@@ -5,7 +5,7 @@ from ..config import config
 def get_credentials():  # keys correspond to pymysql.connect named parameters
     return {"user": config["database_username"],
             "password": config["database_password"],
-            "host": config["database_url"]
+            "host": config["database_url"],
             "port": config["database_port"]}
 
 def open_connection(credentials=None, database=None):
