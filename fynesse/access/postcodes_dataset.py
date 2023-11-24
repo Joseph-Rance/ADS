@@ -40,10 +40,10 @@ URL = "https://www.getthedata.com/downloads/open_postcode_geo.csv.zip"
 @connect
 def load_data(connection):
     r = requests.get(URL)
-    with open("temp_data.csv.zip", 'wb') as f:
+    with open("open_postcode_geo.csv.zip", 'wb') as f:
         f.write(r.content)
     import zipfile
-    with zipfile.ZipFile("temp_data.csv.zip", "r") as z:
+    with zipfile.ZipFile("open_postcode_geo.csv.zip", "r") as z:
         z.extractall()
     with connection.cursor() as cursor:
         cursor.execute("LOAD DATA LOCAL INFILE 'temp_data.csv' \
@@ -53,4 +53,4 @@ def load_data(connection):
                         LINES STARTING BY '' \
                         TERMINATED BY '\\n';")
     connection.commit()
-    os.remove("temp_data.csv")
+    os.remove("./open_postcode_geo.csv")
