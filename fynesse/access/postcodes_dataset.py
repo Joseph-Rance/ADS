@@ -1,3 +1,5 @@
+from .sql_server import connect
+
 import tqdm
 import os
 import requests

@@ -29,7 +29,7 @@ class SQLConnection:  # connection object stores credentials so
     def close(self):
         self.connection.close()
 
-    def get_connection(self):
+    def get(self):
         if not self.connection:
             self.open()
         self.connection.ping()
@@ -38,7 +38,7 @@ class SQLConnection:  # connection object stores credentials so
     instance = None
 
     @classmethod
-    def get_connection_instance(cls):  # this allows us to have a single global connection
+    def get_instance(cls):  # this allows us to have a single global connection
         if cls.instance is None:
             cls.instance = cls()
         return cls.instance
