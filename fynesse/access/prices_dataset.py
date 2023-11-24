@@ -41,7 +41,7 @@ URL = "http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws
 def load_data(connection):
     sess = requests.Session()
     with connection.cursor() as cursor:
-        for year in tqdm(range(1995, 2024)):
+        for year in tqdm.tqdm(range(1995, 2024)):
             for part in [1, 2]:
                 response = sess.get(URL.format(year=year, part=part))
                 with open("temp_data.csv", 'wb') as f:
