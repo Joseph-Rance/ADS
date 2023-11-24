@@ -67,3 +67,9 @@ def query_table(connection, query):
         cursor.execute(query)
         rows = cursor.fetchall()
     return rows
+
+@connect
+def update_table(connection, query):
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+    connection.commit()
