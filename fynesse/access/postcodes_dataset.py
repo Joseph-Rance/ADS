@@ -24,6 +24,7 @@ TABLE_SCHEMA = '''CREATE TABLE IF NOT EXISTS `postcode_data` (
   `db_id` bigint(20) unsigned NOT NULL
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;'''
 
+@connect
 def create_table(connection):
     with connection.cursor() as cursor:
         cursor.execute("DROP TABLE IF EXISTS `postcode_data`;")
@@ -35,6 +36,7 @@ def create_table(connection):
 
 URL = "https://www.getthedata.com/downloads/open_postcode_geo.csv.zip"
 
+@connect
 def load_data(connection):
     r = requests.get(URL)
     with open("temp_data.csv.zip", 'wb') as f:

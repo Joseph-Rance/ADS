@@ -23,6 +23,7 @@ TABLE_SCHEMA = '''CREATE TABLE IF NOT EXISTS `pp_data` (
   `db_id` bigint(20) unsigned NOT NULL
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;'''
 
+@connect
 def create_table(connection):
     with connection.cursor() as cursor:
         cursor.execute("DROP TABLE IF EXISTS `pp_data`;")
@@ -34,6 +35,7 @@ def create_table(connection):
 
 URL = "http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/pp-{year}-part{part}.csv"
 
+@connect
 def load_data(connection):
     sess = requests.Session()
     with connection.cursor() as cursor:
