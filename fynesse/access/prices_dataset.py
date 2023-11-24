@@ -45,7 +45,7 @@ def load_data(connection):
             for part in [1, 2]:
                 response = sess.get(URL.format(year=year, part=part))
                 with open("temp_data.csv", 'wb') as f:
-                    file.write(r.content)
+                    f.write(r.content)
                 cursor.execute("LOAD DATA LOCAL INFILE 'temp_data.csv' \
                                 INTO TABLE `pp_data` \
                                 FIELDS TERMINATED BY ',' \

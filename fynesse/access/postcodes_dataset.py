@@ -41,7 +41,7 @@ URL = "https://www.getthedata.com/downloads/open_postcode_geo.csv.zip"
 def load_data(connection):
     r = requests.get(URL)
     with open("temp_data.csv.zip", 'wb') as f:
-        file.write(r.content)
+        f.write(r.content)
     import zipfile
     with zipfile.ZipFile("temp_data.csv.zip", "r") as z:
         z.extractall()
