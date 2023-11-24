@@ -43,7 +43,7 @@ def load_data(connection):
     with connection.cursor() as cursor:
         for year in tqdm.tqdm(range(1995, 2024)):
             for part in [1, 2]:
-                response = sess.get(URL.format(year=year, part=part))
+                r = sess.get(URL.format(year=year, part=part))
                 with open("temp_data.csv", 'wb') as f:
                     f.write(r.content)
                 cursor.execute("LOAD DATA LOCAL INFILE 'temp_data.csv' \
