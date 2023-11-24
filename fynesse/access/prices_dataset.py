@@ -52,5 +52,5 @@ def load_data(connection):
                                 OPTIONALLY ENCLOSED by '\"' \
                                 LINES STARTING BY '' \
                                 TERMINATED BY '\\n';")
-    cursor.commit()
+    connection.commit()
     os.remove("temp_data.csv")

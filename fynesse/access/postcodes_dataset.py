@@ -45,11 +45,12 @@ def load_data(connection):
     import zipfile
     with zipfile.ZipFile("temp_data.csv.zip", "r") as z:
         z.extractall()
-    cursor.execute("LOAD DATA LOCAL INFILE 'temp_data.csv' \
-                    INTO TABLE `postcode_data` \
-                    FIELDS TERMINATED BY ',' \
-                    OPTIONALLY ENCLOSED by '\"' \
-                    LINES STARTING BY '' \
-                    TERMINATED BY '\\n';")
-    cursor.commit()
+    with connection.cursor() as cursor:
+        cursor.execute("LOAD DATA LOCAL INFILE 'temp_data.csv' \
+                        INTO TABLE `postcode_data` \
+                        FIELDS TERMINATED BY ',' \
+                        OPTIONALLY ENCLOSED by '\"' \
+                        LINES STARTING BY '' \
+                        TERMINATED BY '\\n';")
+    connection.commit()
     os.remove("temp_data.csv")
