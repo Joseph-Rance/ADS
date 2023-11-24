@@ -1,3 +1,3 @@
-import .sql_server
-import .prices_dataset
-import .postcodes_dataset
+from . import sql_server
+from . import prices_dataset
+from . import postcodes_dataset
