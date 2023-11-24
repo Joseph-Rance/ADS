@@ -5,12 +5,13 @@ from ..config import config
 class SQLConnection:  # connection object stores credentials so
                       # we can reconnect if we get disconnected
 
-    def __init__(self, credentials=None):
+    def __init__(self, credentials=None, database="property_prices"):
 
         if not credentials:
             credentials = self.get_credentials()
 
         self.credentials = credentials
+        self.database = database
         self.connection = None
 
     def __repr__(self):
@@ -28,6 +29,9 @@ class SQLConnection:  # connection object stores credentials so
         with self.connection.cursor() as cursor:
             cursor.execute("SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';")
             cursor.execute("SET time_zone = '+00:00';")
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{self.database}` \
+                             DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;")
+            cursor.execute("USE `property_prices`;")
         self.connection.commit()
 
     def close(self):
@@ -52,14 +56,6 @@ def connect(f):  # decorator passes the global connection to the inner function
         connection = SQLConnection.get_instance()
         return f(connection.get(), *args, **kwargs)
     return inner
-
-@connect
-def use_database(connection, name):
-    with connection.cursor() as cursor:
-        cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{name}`" \
-                        "DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;")
-        cursor.execute("USE `property_prices`;")
-    connection.commit()
 
 @connect
 def query_table(connection, query):
