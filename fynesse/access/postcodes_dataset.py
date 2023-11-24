@@ -44,7 +44,7 @@ def load_data(connection):
         f.write(r.content)
     import zipfile
     with zipfile.ZipFile("open_postcode_geo.csv.zip", "r") as z:
-        z.extractall()
+        z.extractall("open_postcode_geo.csv")
     with connection.cursor() as cursor:
         cursor.execute("LOAD DATA LOCAL INFILE 'temp_data.csv' \
                         INTO TABLE `postcode_data` \
