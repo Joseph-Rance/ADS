@@ -1,6 +1,6 @@
 from .sql_server import connect
 
-import os
+import shutil
 import requests
 import zipfile
 
@@ -44,13 +44,13 @@ def load_data(connection):
         f.write(r.content)
     import zipfile
     with zipfile.ZipFile("open_postcode_geo.csv.zip", "r") as z:
-        z.extractall("open_postcode_geo.csv")
+        z.extractall("temp_data")
     with connection.cursor() as cursor:
-        cursor.execute("LOAD DATA LOCAL INFILE 'open_postcode_geo.csv/open_postcode_geo.csv' \
+        cursor.execute("LOAD DATA LOCAL INFILE 'temp_data/open_postcode_geo.csv' \
                         INTO TABLE `postcode_data` \
                         FIELDS TERMINATED BY ',' \
                         OPTIONALLY ENCLOSED by '\"' \
                         LINES STARTING BY '' \
                         TERMINATED BY '\\n';")
     connection.commit()
-    os.remove("./open_postcode_geo.csv")
+    shutil.rmtree("./temp_data")
