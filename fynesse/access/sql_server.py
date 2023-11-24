@@ -13,6 +13,10 @@ class SQLConnection:  # connection object stores credentials so
         self.credentials = credentials
         self.connection = None
 
+    def __repr__(self):
+        return ("<open" if self.connection else "<closed") + \
+               f" PyMySQL connection to {self.credentials['host']}>"
+
     def get_credentials(self):  # keys correspond to pymysql.connect named parameters
         return {"user": config["database_username"],
                 "password": config["database_password"],
@@ -46,7 +50,7 @@ class SQLConnection:  # connection object stores credentials so
 def connect(f):  # decorator passes in the global connection
     def inner(*args, **kwargs):
         connection = SQLConnection.get_instance()
-        f(connection.get(), *args, **kwargs)
+        return f(connection.get(), *args, **kwargs)
     return inner
 
 @connect
