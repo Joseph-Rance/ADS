@@ -31,8 +31,8 @@ class SQLConnection:  # connection object stores credentials so
             cursor.execute("SET time_zone = '+00:00';")
             cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{self.database}` \
                              DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;")
-            cursor.execute("USE `property_prices`;")
         self.connection.commit()
+        self.connection.select_db(self.database)
 
     def close(self):
         self.connection.close()
