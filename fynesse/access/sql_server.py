@@ -37,10 +37,11 @@ class SQLConnection:  # connection object stores credentials so
     def close(self):
         self.connection.close()
 
-    def get(self):
+    def get(self):  # this provides an alive self.connection
         if not self.connection:
             self.open()
         self.connection.ping()
+        self.connection.select_db(self.database)
         return self.connection
 
     instance = None
