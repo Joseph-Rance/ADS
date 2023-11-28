@@ -11,15 +11,19 @@ type_encodings = {
 
 def predict_price(latitude, longitude, date, property_type):
 
-    dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
-                                       FROM `prices_coordinates_data`
-                                       WHERE 0.0001 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2)
-                                       LIMIT 100;")
+    #dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
+    #                                   FROM `prices_coordinates_data`
+    #                                   WHERE 0.0001 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2)
+    #                                   LIMIT 100;")
+
+    dataset = pd.read_csv("temp_data_2.csv", nrows=1000)
+    dataset = dataset.iloc[0.0001 > (dataset["latitude"] - latitude)**2 + (dataset["longitude"] - longitude)**2]
 
     x = []
     y = []
 
-    for price, lat, lon, t_date, p_type in dataset:
+    for r in dataset.rows:
+        price, lat, lon, t_date, p_type = r["price"], r["latitude"], r["longitude"], r["date_of_transfer"], r["property_type"]
 
         y.append(float(price))
 
