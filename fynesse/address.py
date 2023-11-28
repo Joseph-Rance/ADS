@@ -18,7 +18,7 @@ def predict_price(latitude, longitude, date, property_type):
     #                                   LIMIT 100;")
 
     dataset = pd.read_csv("temp_data_2.csv", nrows=1000)
-    dataset = dataset.iloc[0.0001 > (dataset["latitude"] - latitude)**2 + (dataset["longitude"] - longitude)**2]
+    dataset = dataset.loc[0.0001 > (dataset["latitude"] - latitude)**2 + (dataset["longitude"] - longitude)**2]
 
     x = []
     y = []
