@@ -1,31 +1,72 @@
 from .config import config
 
-from . import access
+def view_on_map(n, s, e, w, ps):
+    fig, ax = plt.subplots()
 
-"""These are the types of import we might expect in this file
-import pandas
-import bokeh
-import seaborn
-import matplotlib.pyplot as plt
-import sklearn.decomposition as decomposition
-import sklearn.feature_extraction"""
+    graph = ox.graph_from_bbox(n, s, e, w)
+    nodes, edges = ox.graph_to_gdfs(graph)
 
-"""Place commands in this file to assess the data you have downloaded. How are missing values encoded, how are outliers encoded? What do columns represent, makes rure they are correctly labeled. How is the data indexed. Crete visualisation routines to assess the data (e.g. in bokeh). Ensure that date formats are correct and correctly timezoned."""
+    edges.plot(ax=ax, linewidth=1, edgecolor="lightgray")
 
+    ax.set_xlim([w, e])
+    ax.set_ylim([s, n])
+    ax.set_xlabel("longitude")
+    ax.set_ylabel("latitude")
 
-def data():
-    """Load the data from access and ensure missing values are correctly encoded as well as indices correct, column names informative, date and times correctly formatted. Return a structured data structure such as a data frame."""
-    df = access.data()
-    raise NotImplementedError
+    ax.scatter([float(i[2]) for i in ps], [float(i[1]) for i in ps], c="red", alpha=0.25, zorder=10,
+            s=[float(i[0])/max([float(i[0]) for i in ps])*200 for i in ps], edgecolors="none")
+    plt.tight_layout()
+    plt.show()
 
-def query(data):
-    """Request user input for some aspect of the data."""
-    raise NotImplementedError
+def view_on_uk(n, s, e, w, ps):
+    # unfortunately the osm outline for uk includes maritime borders so we will have to go with this low res version
+    world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+    ax = world[world.name == 'United Kingdom'].plot(color='white', edgecolor='black')
 
-def view(data):
-    """Provide a view of the data that allows the user to verify some aspect of its quality."""
-    raise NotImplementedError
+    ax.set_xlim([west, east])
+    ax.set_ylim([south, north])
+    ax.set_xlabel("longitude")
+    ax.set_ylabel("latitude")
 
-def labelled(data):
-    """Provide a labelled set of data ready for supervised learning."""
-    raise NotImplementedError
+    ax.scatter([float(i[2]) for i in data_uk], [float(i[1]) for i in data_uk], c="red", alpha=0.25, zorder=10,
+            s=[float(i[0])/max([float(i[0]) for i in data_uk])*200 for i in data_uk], edgecolors="none")
+    plt.tight_layout()
+    plt.show()
+
+TAGS = {"leisure": True, "shop": True, "school:trust": True, "school:type": True, "school:boarding": True,
+        "school:gender": True, "school:selective": True}
+
+def get_closest_pois(p):
+
+    # cap at 2km since this is driving distance
+    pois = ox.geometries_from_bbox(float(p[1]) + 0.02, float(p[1]) - 0.02, float(p[2]) - 0.02, float(p[2]) + 0.02, TAGS)
+
+    closest_shop = second_closest_shop = closest_leisure = closest_school = log(2.2)
+
+    for index, row in pois.iterrows():
+
+        d = log(distance.distance((row["geometry"].centroid.y, row["geometry"].centroid.x), (float(p[1]), float(p[2]))).km)
+
+        try:
+            if row["shop"] != "NaN":
+                if d < closest_shop:
+                    second_closest_shop = closest_shop
+                    closest_shop = d
+                elif d < second_closest_shop:
+                    second_closest_shop = d
+        except:
+            pass
+
+        try:
+            if row["leisure"] != "NaN":
+                closest_leisure = min(closest_leisure, d)
+        except:
+            pass
+
+        try:
+            if row["amenity"] != "NaN":  # school
+                closest_leisure = min(closest_school, d)
+        except:
+            pass
+
+    return closest_shop, second_closest_shop, closest_leisure, closest_school

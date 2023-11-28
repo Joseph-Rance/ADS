@@ -1,18 +1,12 @@
-# This file contains code for suporting addressing questions in the data
+from . import assess
 
-"""# Here are some of the imports we might expect 
-import sklearn.model_selection  as ms
-import sklearn.linear_model as lm
-import sklearn.svm as svm
-import sklearn.naive_bayes as naive_bayes
-import sklearn.tree as tree
+features: type (OHE), distance to shops, date
 
-import GPy
-import torch
-import tensorflow as tf
+type_encodings = {
+    "F": [1,0,0,0,0], "S": [0,1,0,0,0], "D": [0,0,1,0,0], "T": [0,0,0,1,0], "O": [0,0,0,0,1]
+}
 
-# Or if it's a statistical analysis
-import scipy.stats"""
+def predict_price(latitude, longitude, date, property_type):
+    pois = assess.get_closest_pois((latitude, longitude))
 
-"""Address a particular question that arises from the data"""
-
+    features = type_encodings[property_type] + list(pois) + (i[1] - datetime.date(1995, 1, 1)).total_seconds() // (30*24*60*60)
