@@ -36,7 +36,7 @@ def predict_price(latitude, longitude, date, property_type):
     basis = sm.OLS(np.array(y), np.array(x))
     results_basis = basis.fit()
 
-    features = np.array([[1] \
+    features = np.array([1] \
                + type_encodings[property_type] \
                + list(assess.get_closest_pois((latitude, longitude))) \
                + [(datetime.datetime.strptime(date, '%Y-%m-%d 00:00').date()  - datetime.date(1995, 1, 1)).total_seconds() // (30*24*60*60)])
