@@ -1,6 +1,9 @@
 from . import assess
+from . import sql_server
 
 import datetime
+import numpy as np
+import statsmodels.api as sm
 
 type_encodings = {
     "F": [1,0,0,0,0], "S": [0,1,0,0,0], "D": [0,0,1,0,0], "T": [0,0,0,1,0], "O": [0,0,0,0,1]
@@ -8,11 +11,10 @@ type_encodings = {
 
 def predict_price(latitude, longitude, date, property_type):
 
-    dataset = fynesse.access.sql_server.query_table(f"SELECT p.price, l.latitude, l.longitude, p.date_of_transfer, p.property_type \
-                                              FROM `pp_data` as p \
-                                               INNER JOIN `postcode_data` as l \
-                                               ON p.postcode = l.postcode AND 0.0001 > \
-                                               POWER(l.latitude - {latitude}, 2) + POWER(l.longitude - {longitude}, 2);")
+    dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
+                                       FROM `prices_coordinates_data`
+                                       WHERE 0.0001 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2)
+                                       LIMIT 100;")
 
     x = []
     y = []
@@ -36,7 +38,7 @@ def predict_price(latitude, longitude, date, property_type):
 
     pred = results_basis.get_prediction(features).summary_frame(alpha=0.05)
 
-    if results_basis.rsquared < 0:
+    if results_basis.rsquared < 0:  # TODO
         print("warning: poor prediction accuracy likely")
 
     return pred, results_basis.rsquared

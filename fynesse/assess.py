@@ -1,5 +1,11 @@
 from .config import config
 
+import matplotlib.pyplot as plt
+import osmnx as ox
+import geopandas as gpd
+from math import log
+from geopy import distance
+
 def view_on_map(n, s, e, w, ps):
     fig, ax = plt.subplots()
 
