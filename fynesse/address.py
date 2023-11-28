@@ -23,7 +23,7 @@ def predict_price(latitude, longitude, date, property_type):
     x = []
     y = []
 
-    for r in dataset.rows:
+    for i,r in dataset.iterrows():
         price, lat, lon, t_date, p_type = r["price"], r["latitude"], r["longitude"], r["date_of_transfer"], r["property_type"]
 
         y.append(float(price))
