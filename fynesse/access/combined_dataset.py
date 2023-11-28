@@ -51,7 +51,8 @@ COLUMN_2 = [
     "postcode",
     "property_type",
     "latitude",
-    "longitude"
+    "longitude",
+    "db_id"
 ]
 
 TABLE_SCHEMA = '''CREATE TABLE IF NOT EXISTS `prices_coordinates_data` (
@@ -61,6 +62,7 @@ TABLE_SCHEMA = '''CREATE TABLE IF NOT EXISTS `prices_coordinates_data` (
   `property_type` varchar(1) COLLATE utf8_bin NOT NULL,
   `latitude` decimal(11,8) NOT NULL,
   `longitude` decimal(10,8) NOT NULL
+  `db_id` bigint(20) unsigned NOT NULL
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;'''
 
 @connect
@@ -91,7 +93,8 @@ def load_data(connection):
         f.write(r.content)
 
     table_0 = dd.read_csv("temp_data_0/open_postcode_geo.csv", header=None,
-                         names=COLUMNS_0, dtype={a: str for a in COLUMNS_0})
+                         names=COLUMNS_0, dtype={a: str for a in COLUMNS_0}) \
+                         [COLUMN_1[:-1]]  # this is to force db_id from dataset 1
 
     table_1 = dd.read_csv("temp_data_1.csv", header=None,
                          names=COLUMNS_1, dtype={a: str for a in COLUMNS_1})
