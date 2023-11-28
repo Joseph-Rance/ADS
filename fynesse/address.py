@@ -4,6 +4,7 @@ from . import assess
 import datetime
 import numpy as np
 import statsmodels.api as sm
+import pandas as pd
 
 type_encodings = {
     "F": [1,0,0,0,0], "S": [0,1,0,0,0], "D": [0,0,1,0,0], "T": [0,0,0,1,0], "O": [0,0,0,0,1]
