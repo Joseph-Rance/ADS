@@ -4,7 +4,7 @@ import dask.dataframe as dd
 import requests
 import shutil
 
-COLUMN_0 = [
+COLUMNS_0 = [
     "postcode",
     "status",
     "usertype",
@@ -25,7 +25,7 @@ COLUMN_0 = [
     "db_id"
 ]
 
-COLUMN_1 = [
+COLUMNS_1 = [
     "transaction_unique_identifier",
     "price",
     "date_of_transfer",
@@ -45,7 +45,7 @@ COLUMN_1 = [
     "db_id"
 ]
 
-COLUMN_2 = [
+COLUMNS_2 = [
     "price",
     "date_of_transfer",
     "postcode",
@@ -94,7 +94,7 @@ def load_data(connection):
 
     table_0 = dd.read_csv("temp_data_0/open_postcode_geo.csv", header=None,
                          names=COLUMNS_0, dtype={a: str for a in COLUMNS_0}) \
-                         [COLUMN_1[:-1]]  # this is to force db_id from dataset 1
+                         [COLUMNS_1[:-1]]  # this is to force db_id from dataset 1
 
     table_1 = dd.read_csv("temp_data_1.csv", header=None,
                          names=COLUMNS_1, dtype={a: str for a in COLUMNS_1})
