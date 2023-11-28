@@ -45,7 +45,7 @@ TAGS = {"leisure": True, "shop": True, "school:trust": True, "school:type": True
 def get_closest_pois(p):
 
     # cap at ~2km since this is driving distance
-    pois = ox.geometries_from_bbox(float(p[1]) + 0.02, float(p[1]) - 0.02, float(p[2]) - 0.02, float(p[2]) + 0.02, TAGS)
+    pois = ox.geometries_from_bbox(float(p[0]) + 0.02, float(p[0]) - 0.02, float(p[1]) - 0.02, float(p[1]) + 0.02, TAGS)
 
     closest_shop = second_closest_shop = closest_leisure = closest_school = log(2.2)
 
