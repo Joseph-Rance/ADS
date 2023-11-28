@@ -61,7 +61,7 @@ TABLE_SCHEMA = '''CREATE TABLE IF NOT EXISTS `prices_coordinates_data` (
   `postcode` varchar(8) COLLATE utf8_bin NOT NULL,
   `property_type` varchar(1) COLLATE utf8_bin NOT NULL,
   `latitude` decimal(11,8) NOT NULL,
-  `longitude` decimal(10,8) NOT NULL
+  `longitude` decimal(10,8) NOT NULL,
   `db_id` bigint(20) unsigned NOT NULL
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;'''
 
