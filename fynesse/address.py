@@ -44,7 +44,7 @@ def predict_price(latitude, longitude, date, property_type):
 
     pred = results_basis.get_prediction(features).summary_frame(alpha=0.05)
 
-    if results_basis.rsquared < 0:  # TODO
+    if results_basis.rsquared < 0.5:  # TODO
         print("warning: poor prediction accuracy likely")
 
     return pred, results_basis.rsquared
