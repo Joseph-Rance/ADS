@@ -94,13 +94,12 @@ def load_data(connection):
 
     table_0 = dd.read_csv("temp_data_0/open_postcode_geo.csv", header=None,
                          names=COLUMNS_0, dtype={a: str for a in COLUMNS_0}) \
-                         [COLUMNS_1[:-1]]  # this is to force db_id from dataset 1
+                         [COLUMNS_0[:-1]]  # this is to force db_id from dataset 1
 
     table_1 = dd.read_csv("temp_data_1.csv", header=None,
                          names=COLUMNS_1, dtype={a: str for a in COLUMNS_1})
 
-    table_2 = dd.merge(table0, table1, on='postcode', how='inner') \
-        .iloc[table_2["ppd_category_type"] == "A"][COLUMNS_2]
+    table_2 = dd.merge(table_0, table_1, on='postcode', how='inner')[COLUMNS_2]
 
     table_2.to_csv("temp_data_2.csv", single_file=True)
 
