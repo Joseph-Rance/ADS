@@ -96,7 +96,7 @@ def load_data(connection):
     table_1 = dd.read_csv("temp_data_1.csv", header=None,
                          names=COLUMNS_1, dtype={a: str for a in COLUMNS_1})
 
-    table_2 = dd.merge(table0, table1, on='postcode', how='inner')
+    table_2 = dd.merge(table0, table1, on='postcode', how='inner') \
         .iloc[table_2["ppd_category_type"] == "A"][COLUMNS_2]
 
     table_2.to_csv("temp_data_2.csv", single_file=True)
@@ -111,4 +111,4 @@ def load_data(connection):
     connection.commit()
     shutil.rmtree("./temp_data_0")
     os.remove("temp_data_1.csv")
-    os.remove("temp_data_2.csv")
+    #os.remove("temp_data_2.csv")
