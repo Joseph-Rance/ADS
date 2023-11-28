@@ -51,7 +51,7 @@ def get_closest_pois(p):
 
     for index, row in pois.iterrows():
 
-        d = log(distance.distance((row["geometry"].centroid.y, row["geometry"].centroid.x), (float(p[1]), float(p[2]))).km)
+        d = log(distance.distance((row["geometry"].centroid.y, row["geometry"].centroid.x), (float(p[0]), float(p[1]))).km)
 
         try:
             if row["shop"] != "NaN":
