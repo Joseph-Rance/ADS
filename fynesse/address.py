@@ -12,25 +12,25 @@ TYPE_ENCODINGS = {
 TAGS = {"amenity": ["college", "nightclub"], "building": "office", "railway": "station"}
 TAG_NAMES = ["amenity=college", "amenity=nightclub", "building=office", "railway=station"]
 
-def predict_price(latitude, longitude, date, property_type):
+def predict_price(latitude, longitude, date, property_type, dataset=None):  # we can pass a dataset in for debugging
 
-    dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
-                                       FROM `prices_coordinates_data` \
-                                       WHERE 0.0068 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2) \
-                                       LIMIT 100;")
+    if not dataset:
+        dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
+                                           FROM `prices_coordinates_data` \
+                                           WHERE 0.0068 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2) \
+                                           LIMIT 100;")
 
     x, y = [], []
 
-    for i,r in dataset.iterrows():
+    for r in dataset:
         
-        t_closest_pois = osm.get_closest_pois((None, r["latitude"], r["longitude"]), TAGS, TAG_NAMES)
+        t_closest_pois = osm.get_closest_pois((None, r[1], r[2]), TAGS, TAG_NAMES)
         t_closest_pois = [t_closest_pois[n][0] for n in TAG_NAMES]  # can't just iterate over .values() because that might
                                                                     # not be always same order (I think)
 
-        t_date = r["date_of_transfer"]
-        t_property_type = r["property_type"]
+        t_date, t_property_type = r[3], r[4]
 
-        y.append(float(r["price"]))
+        y.append(float(r[0]))
 
         x.append([1] \
                + TYPE_ENCODINGS[t_property_type] \
