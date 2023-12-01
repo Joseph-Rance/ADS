@@ -6,7 +6,7 @@ import statsmodels.api as sm
 import osmnx as ox
 
 
-def get_closest_pois(point, tags):
+def get_closest_pois(point, tags, tag_names):
 
     # ~2km radius seems reasonable
     pois = ox.features.features_from_bbox(float(point[1]) + 0.02, float(point[1]) - 0.02,
