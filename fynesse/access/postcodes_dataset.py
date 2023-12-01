@@ -1,8 +1,8 @@
 from .sql_server import connect
 
 import shutil
-import requests
 import zipfile
+import requests
 
 TABLE_SCHEMA = '''CREATE TABLE IF NOT EXISTS `postcode_data` (
   `postcode` varchar(8) COLLATE utf8_bin NOT NULL,

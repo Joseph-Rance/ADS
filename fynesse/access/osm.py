@@ -1,8 +1,4 @@
-from math import log
-import matplotlib.pyplot as plt
-import numpy as np
-import statsmodels.api as sm
-
+from geopy import distance
 import osmnx as ox
 
 
