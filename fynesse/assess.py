@@ -3,6 +3,7 @@ from .config import config
 import matplotlib.pyplot as plt
 import osmnx as ox
 import geopandas as gpd
+import numpy as np
 from math import log
 from geopy import distance
 
