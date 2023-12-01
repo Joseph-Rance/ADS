@@ -43,13 +43,13 @@ def plot_country(country):
     world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
     return world[world.name == country].plot(color='white', edgecolor='black')
 
-def scatter_prices_lat_lon(lat_lon_data, bounds, ax=plt):
+def scatter_prices_lat_lon(lat_lon_data, bounds, alpha=0.1, ax=plt):
 
     cmap = plt.cm.jet
     norm = matplotlib.colors.Normalize(vmin=min([float(i[0]) for i in lat_lon_data]), vmax=max([float(i[0]) for i in lat_lon_data]))
 
     ax.scatter([float(i[2]) for i in lat_lon_data], [float(i[1]) for i in lat_lon_data],
-                alpha=0.1, zorder=10, c=cmap(norm([float(i[0]) for i in lat_lon_data])), edgecolors="none", cmap=plt.cm.rainbow)
+                alpha=alpha, zorder=10, c=cmap(norm([float(i[0]) for i in lat_lon_data])), edgecolors="none", cmap=plt.cm.rainbow)
     plt.colorbar(plt.cm.ScalarMappable(cmap=cmap, norm=norm), label="price (£)")  # for some reason this doesn't work with existing axes
 
     plt.title("Prices against location")
