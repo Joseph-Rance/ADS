@@ -12,7 +12,7 @@ def plot_poi_data(poi_data, tag_idx, tag_names, ax=None):
     if not ax:
         ax = plt
 
-    plt.set_title(("closest " if tag_idx%2 == 0 else "second closest ") + "/".join(tag_names[tag_idx // 2].split("=")))
+    ax.set_title(("closest " if tag_idx%2 == 0 else "second closest ") + "/".join(tag_names[tag_idx // 2].split("=")))
 
     x, y = [], []
     for data_idx, _ in enumerate(data):
@@ -31,12 +31,12 @@ def plot_poi_data(poi_data, tag_idx, tag_names, ax=None):
     xn = np.concatenate((np.ones((50, 1)), np.linspace(-4, 1, 50).reshape(-1, 1)), axis=1)
     yn = basis.get_prediction(xn).summary_frame(alpha=0.05)
 
-    plt.scatter(x, y, color="red", alpha=0.3)
-    plt.plot(xn, yn['mean'], color='blue', linestyle='--', zorder=1)
-    plt.fill_between(np.linspace(-4, 1, 50), yn['obs_ci_lower'], yn['obs_ci_upper'], color='cyan', alpha=0.3, zorder=1)
-    plt.set_ylim(-0.5e6, 1.5e6)
-    plt.set_xlabel("distance (log scale)")
-    plt.set_ylabel("price (£)")
+    ax.scatter(x, y, color="red", alpha=0.3)
+    ax.plot(xn, yn['mean'], color='blue', linestyle='--', zorder=1)
+    ax.fill_between(np.linspace(-4, 1, 50), yn['obs_ci_lower'], yn['obs_ci_upper'], color='cyan', alpha=0.3, zorder=1)
+    ax.set_ylim(-0.5e6, 1.5e6)
+    ax.set_xlabel("distance (log scale)")
+    ax.set_ylabel("price (£)")
 
 
 
