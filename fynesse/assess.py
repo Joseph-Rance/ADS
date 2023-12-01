@@ -15,11 +15,11 @@ def plot_poi_data(poi_data, tag_idx, tag_names, ax=None):
     ax.set_title(("closest " if tag_idx%2 == 0 else "second closest ") + "/".join(tag_names[tag_idx // 2].split("=")))
 
     x, y = [], []
-    for data_idx, _ in enumerate(data):
-        v = [i for l in data[data_idx][1].values() for i in l][tag_idx]  # flatten data so we can directly index 
-                                                                         # the distance of the tag we want
-        if v != 10 and data[data_idx][0] <= 1_000_000:  # 10 is the default value (i.e. no close instances), and houses
-            y.append(data[data_idx][0])                 # more than £1,000,000 make the graphs confusing
+    for data_idx, _ in enumerate(poi_data):
+        v = [i for l in poi_data[data_idx][1].values() for i in l][tag_idx]  # flatten data so we can directly index
+                                                                             # the distance of the tag we want
+        if v != 10 and poi_data[data_idx][0] <= 1_000_000:  # 10 is the default value (i.e. no close instances), and houses
+            y.append(poi_data[data_idx][0])                 # more than £1,000,000 make the graphs confusing
             x.append(log(v))
 
     if not x:
