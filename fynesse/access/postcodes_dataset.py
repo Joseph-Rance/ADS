@@ -35,6 +35,7 @@ def create_table(connection):
                         NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;")
     connection.commit()
 
+# Source: Office for National Statistics licensed under the Open Government Licence v.3.0
 URL = "https://www.getthedata.com/downloads/open_postcode_geo.csv.zip"
 
 @connect

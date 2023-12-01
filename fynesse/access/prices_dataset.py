@@ -35,6 +35,8 @@ def create_table(connection):
                         NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;")
     connection.commit()
 
+# Contains HM Land Registry data © Crown copyright and database right 2021.
+# This data is licensed under the Open Government Licence v3.0.
 URL = "http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/pp-{year}-part{part}.csv"
 
 @connect

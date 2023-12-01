@@ -6,6 +6,46 @@ import geopandas as gpd
 from math import log
 from geopy import distance
 
+
+def plot_poi_data(poi_data, tag_idx, tag_names, ax=None):
+
+    if not ax:
+        ax = plt
+
+    plt.set_title(("closest " if tag_idx%2 == 0 else "second closest ") + "/".join(tag_names[tag_idx // 2].split("=")))
+
+    x, y = [], []
+    for data_idx, _ in enumerate(data):
+        v = [i for l in data[data_idx][1].values() for i in l][tag_idx]  # flatten data so we can directly index 
+                                                                         # the distance of the tag we want
+        if v != 10 and data[data_idx][0] <= 1_000_000:  # 10 is the default value (i.e. no close instances), and houses
+            y.append(data[data_idx][0])                 # more than £1,000,000 make the graphs confusing
+            x.append(log(v))
+
+    if not x:
+        return  # if we have no instances of the facility nearby, return now
+
+    dist_design = np.array([[1, i] for i in x])
+    basis = sm.OLS(np.array(y), dist_design).fit()
+
+    xn = np.concatenate((np.ones((50, 1)), np.linspace(-4, 1, 50).reshape(-1, 1)), axis=1)
+    yn = basis.get_prediction(xn).summary_frame(alpha=0.05)
+
+    plt.scatter(x, y, color="red", alpha=0.3)
+    plt.plot(xn, yn['mean'], color='blue', linestyle='--', zorder=1)
+    plt.fill_between(np.linspace(-4, 1, 50), yn['obs_ci_lower'], yn['obs_ci_upper'], color='cyan', alpha=0.3, zorder=1)
+    plt.set_ylim(-0.5e6, 1.5e6)
+    plt.set_xlabel("distance (log scale)")
+    plt.set_ylabel("price (£)")
+
+
+
+
+
+
+
+
+
 def view_on_map(n, s, e, w, ps):
     fig, ax = plt.subplots()
 

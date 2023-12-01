@@ -12,6 +12,8 @@ type_encodings = {
 
 def predict_price(latitude, longitude, date, property_type):
 
+    # REMOVE: records based on `ppd_category_type` and `tenure_type`
+
     #dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
     #                                   FROM `prices_coordinates_data`
     #                                   WHERE 0.0001 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2)
