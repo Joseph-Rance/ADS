@@ -13,7 +13,7 @@ def get_closest_pois(point, tags, tag_names):
     for _, row in pois.iterrows():
 
         # using straight distance not walking distance because it is generally very similar
-        d = distance.distance((row["geometry"].centroid.y, row["geometry"].centroid.x), (float(p[1]), float(p[2]))).km
+        d = distance.distance((row["geometry"].centroid.y, row["geometry"].centroid.x), (float(point[1]), float(point[2]))).km
 
         for k in tags.keys():
             if k not in row.keys():
