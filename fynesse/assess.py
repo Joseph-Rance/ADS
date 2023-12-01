@@ -76,6 +76,11 @@ def get_matrix(data, f):
     return out
 
 def plot_prices_distances(prices, distances, max_distance, ax=plt):
+
+    ax.set_title(f"difference in house price within {max_distance}km")
+    ax.set_xlabel("distance (km)")
+    ax.set_ylabel("price difference (£)")
+
     flat_prices = [0.]
     flat_distances = [0]
 
@@ -85,7 +90,7 @@ def plot_prices_distances(prices, distances, max_distance, ax=plt):
                 flat_prices.append(prices[i, j])
                 flat_distances.append(distances[i, j])
 
-    ax.scatter(flat_distances, flat_prices)
+    ax.scatter(flat_distances, flat_prices, alpha=0.1)
 
 def scatter_prices_date(date_data, ax=plt):
     prices = np.array([float(i[0]) for i in date_data])
