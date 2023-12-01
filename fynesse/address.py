@@ -14,7 +14,7 @@ TAG_NAMES = ["amenity=college", "amenity=nightclub", "building=office", "railway
 
 def predict_price(latitude, longitude, date, property_type, dataset=None):  # we can pass a dataset in for debugging
 
-    if not dataset:
+    if dataset is not None:
         dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
                                            FROM `prices_coordinates_data` \
                                            WHERE 0.0068 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2) \
