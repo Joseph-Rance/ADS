@@ -52,10 +52,12 @@ def scatter_prices_lat_lon(lat_lon_data, bounds, ax=plt):
                 alpha=0.1, zorder=10, c=cmap(norm([float(i[0]) for i in lat_lon_data])), edgecolors="none", cmap=plt.cm.rainbow)
     plt.colorbar(plt.cm.ScalarMappable(cmap=cmap, norm=norm), label="price (£)")  # for some reason this doesn't work with existing axes
 
-    ax.xlim([bounds["west"], bounds["east"]])
-    ax.ylim([bounds["south"], bounds["north"]])
-    ax.xlabel("longitude")
-    ax.ylabel("latitude")
+    plt.title("Prices against location")
+
+    plt.xlim([bounds["west"], bounds["east"]])
+    plt.ylim([bounds["south"], bounds["north"]])
+    plt.xlabel("longitude")
+    plt.ylabel("latitude")
 
 def plot_roads(bounds, ax=plt):
 
