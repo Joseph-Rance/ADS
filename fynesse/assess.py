@@ -50,7 +50,7 @@ def scatter_prices_lat_lon(lat_lon_data, bounds, ax=plt):
 
     ax.scatter([float(i[2]) for i in lat_lon_data], [float(i[1]) for i in lat_lon_data],
                 alpha=0.1, zorder=10, c=cmap(norm([float(i[0]) for i in lat_lon_data])), edgecolors="none", cmap=plt.cm.rainbow)
-    ax.colorbar(plt.cm.ScalarMappable(cmap=cmap, norm=norm), label="price (£)")
+    plt.colorbar(plt.cm.ScalarMappable(cmap=cmap, norm=norm), label="price (£)", ax=ax)
 
     ax.set_title("Prices against location")
 
