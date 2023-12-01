@@ -4,7 +4,7 @@
 # This setup format based on that by Navdeep Gill <https://www.linkedin.com/in/navdeep-gill-b1729456/>
 # https://github.com/navdeep-G/setup.py
 
-# Changes by Neil D. Lawrence for fynesse template
+# Changes by Neil D. Lawrence
 
 # Note: To use the 'upload' functionality of this file, you must:
 #   $ pipenv install twine --dev
@@ -18,16 +18,16 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = "fynesse"
-DESCRIPTION = "Template files for performing fynesse pipeline data analysis with python."
-URL = "https://github.com/lawrennd/fynesse_template"
-EMAIL = "emal@domain.here"
-AUTHOR = "Givenname Familyname"
+DESCRIPTION = "Files for performing fynesse pipeline data analysis with python."
+URL = "https://github.com/Joseph-Rance/ADS"
+EMAIL = "jr879@cam.ac.uk"
+AUTHOR = "Joseph Rance"
 REQUIRES_PYTHON = ">=3.6.0"
 VERSION = "0.1.0"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    "pandas", "numpy", "jupyter", "matplotlib", 
+    "dask", "geopy", "osmnx", "pymysql", "numpy", "statsmodels", "matplotlib", "geopandas", "seaborn", "jupyter"
 ]
 
 # What packages are optional?
@@ -36,11 +36,6 @@ EXTRAS = {
 }
 
 PACKAGE_DATA = {"fynesse": ["defaults.yml"]}
-
-# The rest you shouldn't have to touch too much :)
-# ------------------------------------------------
-# Except, perhaps the License and Trove Classifiers!
-# If you do change the License, remember to change the Trove Classifier for that!
 
 here = os.path.abspath(os.path.dirname(__file__))
 

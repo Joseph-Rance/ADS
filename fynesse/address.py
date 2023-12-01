@@ -14,11 +14,14 @@ TAG_NAMES = ["amenity=college", "amenity=nightclub", "building=office", "railway
 
 def predict_price(latitude, longitude, date, property_type, dataset=None):  # we can pass a dataset in for debugging
 
-    if dataset is not None:
+    if dataset is None:
         dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
                                            FROM `prices_coordinates_data` \
                                            WHERE 0.0068 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2) \
                                            LIMIT 100;")
+
+    if len(dataset) < 20:
+        print("warning: poor prediction accuracy likely")
 
     x, y = [], []
 
@@ -41,10 +44,10 @@ def predict_price(latitude, longitude, date, property_type, dataset=None):  # we
     results_basis = basis.fit()
 
     closest_pois = osm.get_closest_pois((None, latitude, longitude), TAGS, TAG_NAMES)
-    closest_pois = [t_closest_pois[n][0] for n in TAG_NAMES]
+    closest_pois = [closest_pois[n][0] for n in TAG_NAMES]
 
     features = np.array([1] \
-                      + type_encodings[property_type] \
+                      + TYPE_ENCODINGS[property_type] \
                       + closest_pois \
                       + [(datetime.datetime.strptime(date, '%Y-%m-%d 00:00').date()  - datetime.date(1995, 1, 1)).total_seconds() // (30*24*60*60)])
 
@@ -53,4 +56,4 @@ def predict_price(latitude, longitude, date, property_type, dataset=None):  # we
     if results_basis.rsquared < 0.5:
         print("warning: poor prediction accuracy likely")
 
-    return pred, results_basis.rsquared
+    return pred["mean"], results_basis.rsquared

@@ -1,6 +1,11 @@
-#!/usr/bin/env python
+from ... import fynesse
 
-import nose, warnings
+import nose
 
-# THese tests should be checking the known access problems, such as whether an excel file has turned a gene to a date or has more than 1,048,576 rows.
+def test_pp_data_not_empty():
+    assert len(fynesse.access.sql_server.query_table("SELECT * FROM `pp_data` LIMIT 1")) == 1
+
+def test_postcode_data_not_empty():
+    assert len(fynesse.access.sql_server.query_table("SELECT * FROM `postcode_data` LIMIT 1")) == 1
+
 nose.main("fynesse", defaultTest="fynesse/tests/access", argv=["", ""])
