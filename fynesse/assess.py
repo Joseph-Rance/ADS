@@ -95,7 +95,7 @@ def plot_prices_distances(prices, distances, max_distance, ax=plt):
 def scatter_prices_date(date_data, ax=plt):
     prices = np.array([float(i[0]) for i in date_data])
     dates = np.array([(i[1] - datetime.date(1995, 1, 1)).total_seconds() // (30*24*60*60) for i in date_data])
-    ax.scatter(dates, prices, zorder=2, alpha=0.1, color="red", edgecolors="none", zorder=10)
+    ax.scatter(dates, prices, alpha=0.1, color="red", edgecolors="none", zorder=10)
     ax.title("average price over time")
     ax.xlabel("months from 1995")
     ax.ylabel("price (£)")
