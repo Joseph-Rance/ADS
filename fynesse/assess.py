@@ -4,6 +4,7 @@ from math import log
 import datetime
 from geopy import distance
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import geopandas as gpd
 import osmnx as ox
@@ -44,9 +45,14 @@ def plot_country(country):
 
 def scatter_prices_lat_lon(lat_lon_data, bounds, ax=plt):
 
-    m = max([float(i[0]) for i in lat_lon_data])*200
-    ax.scatter([float(i[2]) for i in lat_lon_data], [float(i[1]) for i in lat_lon_data], c="red",
-               alpha=0.25, zorder=10, s=[float(i[0])/m for i in lat_lon_data], edgecolors="none")
+    cmap = plt.cm.jet
+    norm = matplotlib.colors.Normalize(vmin=min([float(i[0]) for i in lat_lon_data]), vmax=max([float(i[0]) for i in lat_lon_data]))
+
+    ax.scatter([float(i[2]) for i in lat_lon_data], [float(i[1]) for i in lat_lon_data],
+                alpha=0.1, zorder=10, c=cmap(norm([float(i[0]) for i in lat_lon_data])), edgecolors="none", cmap=plt.cm.rainbow)
+    ax.colorbar(plt.cm.ScalarMappable(cmap=cmap, norm=norm), label="price (£)")
+
+    ax.set_title("Prices against location")
 
     ax.set_xlim([bounds["west"], bounds["east"]])
     ax.set_ylim([bounds["south"], bounds["north"]])
