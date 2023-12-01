@@ -1,19 +1,15 @@
 from .config import config
 
-import matplotlib.pyplot as plt
-import osmnx as ox
-import geopandas as gpd
-import numpy as np
 from math import log
-from geopy import distance
 import datetime
+from geopy import distance
+import numpy as np
+import matplotlib.pyplot as plt
+import geopandas as gpd
+import osmnx as ox
 import statsmodels.api as sm
 
-
-def plot_poi_data(poi_data, tag_idx, tag_names, ax=None):
-
-    if not ax:
-        ax = plt
+def plot_poi_data(poi_data, tag_idx, tag_names, ax=plt):
 
     ax.set_title(("closest " if tag_idx%2 == 0 else "second closest ") + "/".join(tag_names[tag_idx // 2].split("=")))
 
@@ -41,81 +37,66 @@ def plot_poi_data(poi_data, tag_idx, tag_names, ax=None):
     ax.set_xlabel("distance (log scale)")
     ax.set_ylabel("price (£)")
 
+def plot_country(country, ax=plt):
 
+    world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+    world[world.name == country].plot(color='white', edgecolor='black', ax=ax)
 
+def scatter_prices_lat_lon(lat_lon_data, bounds, ax=plt):
 
+    m = max([float(i[0]) for i in lat_lon_data])*200
+    ax.scatter([float(i[2]) for i in lat_lon_data], [float(i[1]) for i in lat_lon_data], c="red",
+               alpha=0.25, zorder=10, s=[float(i[0])/m for i in lat_lon_data], edgecolors="none")
 
+    ax.set_xlim([bounds["west"], bounds["east"]])
+    ax.set_ylim([bounds["south"], bounds["north"]])
+    ax.set_xlabel("longitude")
+    ax.set_ylabel("latitude")
 
+def plot_roads(bounds, ax=plt):
 
-
-
-def view_on_map(n, s, e, w, ps):
-    fig, ax = plt.subplots()
-
-    graph = ox.graph_from_bbox(n, s, e, w)
+    graph = ox.graph_from_bbox(bounds["north"], bounds["south"], bounds["east"], bounds["west"])
     nodes, edges = ox.graph_to_gdfs(graph)
-
     edges.plot(ax=ax, linewidth=1, edgecolor="lightgray")
 
-    ax.set_xlim([w, e])
-    ax.set_ylim([s, n])
-    ax.set_xlabel("longitude")
-    ax.set_ylabel("latitude")
+def get_matrix(data, f):
 
-    ax.scatter([float(i[2]) for i in ps], [float(i[1]) for i in ps], c="red", alpha=0.25, zorder=10,
-            s=[float(i[0])/max([float(i[0]) for i in ps])*200 for i in ps], edgecolors="none")
-    plt.tight_layout()
-    plt.show()
+    out = np.zeros((len(data), len(data)))
 
-def view_on_uk(n, s, e, w, ps):
-    # unfortunately the osm outline for uk includes maritime borders so we will have to go with this low res version
-    world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
-    ax = world[world.name == 'United Kingdom'].plot(color='white', edgecolor='black')
+    for i, a in enumerate(data):
+        for j, b in enumerate(data):
+            out[i, j] = f(a, b)
 
-    ax.set_xlim([west, east])
-    ax.set_ylim([south, north])
-    ax.set_xlabel("longitude")
-    ax.set_ylabel("latitude")
+    return out
 
-    ax.scatter([float(i[2]) for i in data_uk], [float(i[1]) for i in data_uk], c="red", alpha=0.25, zorder=10,
-            s=[float(i[0])/max([float(i[0]) for i in data_uk])*200 for i in data_uk], edgecolors="none")
-    plt.tight_layout()
-    plt.show()
+def plot_prices_distances(prices, distances, max_distance, ax=plt):
+    flat_prices = [0.]
+    flat_distances = [0]
 
-TAGS = {"leisure": True, "shop": True, "school:trust": True, "school:type": True, "school:boarding": True,
-        "school:gender": True, "school:selective": True}
+    for i in range(prices.shape[0]):
+        for j in range(0, i):
+            if distances[i, j] < max_distance:
+                flat_prices.append(prices[i, j])
+                flat_distances.append(distances[i, j])
 
-def get_closest_pois(p):
+    ax.scatter(flat_distances, flat_prices)
 
-    # cap at ~2km since this is driving distance
-    pois = ox.geometries_from_bbox(float(p[0]) + 0.02, float(p[0]) - 0.02, float(p[1]) - 0.02, float(p[1]) + 0.02, TAGS)
+def scatter_prices_date(date_data, ax=plt):
+    prices = np.array([float(i[0]) for i in date_data])
+    dates = np.array([(i[1] - datetime.date(1995, 1, 1)).total_seconds() // (30*24*60*60) for i in date_data])
+    ax.scatter(dates, prices, zorder=2, alpha=0.2)
 
-    closest_shop = second_closest_shop = closest_leisure = closest_school = log(2.2)
+def model_prices_date(date_data, ax=plt):
 
-    for index, row in pois.iterrows():
+    prices = np.array([float(i[0]) for i in date_data])
+    dates = np.array([(i[1] - datetime.date(1995, 1, 1)).total_seconds() // (30*24*60*60) for i in date_data])
+    dates_design = np.array([[1, i] for i in dates])
 
-        d = log(distance.distance((row["geometry"].centroid.y, row["geometry"].centroid.x), (float(p[0]), float(p[1]))).km)
+    basis = sm.OLS(prices, dates_design).fit()
 
-        try:
-            if row["shop"] != "NaN":
-                if d < closest_shop:
-                    second_closest_shop = closest_shop
-                    closest_shop = d
-                elif d < second_closest_shop:
-                    second_closest_shop = d
-        except:
-            pass
+    x = np.concatenate((np.ones((50, 1)), np.linspace(dates.min(), dates.max(), 50).reshape(-1, 1)), axis=1)
+    y = basis.get_prediction(x).summary_frame(alpha=0.05)
 
-        try:
-            if row["leisure"] != "NaN":
-                closest_leisure = min(closest_leisure, d)
-        except:
-            pass
-
-        try:
-            if row["amenity"] != "NaN":  # school
-                closest_leisure = min(closest_school, d)
-        except:
-            pass
-
-    return closest_shop, second_closest_shop, closest_leisure, closest_school
+    ax.plot(x, y['mean'], color='cyan',linestyle='--',zorder=1)
+    ax.fill_between(np.linspace(dates.min(), dates.max(), 50), y['obs_ci_lower'], y['obs_ci_upper'],
+                    color='cyan', alpha=0.3, zorder=1)
