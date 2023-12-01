@@ -9,7 +9,8 @@ import osmnx as ox
 def get_closest_pois(point, tags):
 
     # ~2km radius seems reasonable
-    pois = ox.features.features_from_bbox(float(p[1]) + 0.02, float(p[1]) - 0.02, float(p[2]) - 0.02, float(p[2]) + 0.02, tags)
+    pois = ox.features.features_from_bbox(float(point[1]) + 0.02, float(point[1]) - 0.02,
+                                          float(point[2]) - 0.02, float(point[2]) + 0.02, tags)
 
     distances = {n:[10, 10] for n in tag_names}  # first and second closest distances in km
 
