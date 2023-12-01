@@ -99,6 +99,8 @@ def load_data(connection):
     table_1 = dd.read_csv("temp_data_1.csv", header=None,
                          names=COLUMNS_1, dtype={a: str for a in COLUMNS_1})
 
+    table_1 = table_1.loc[(table_1["ppd_category_type"] != "B") & (table_1["tenure_type"] != "L")]
+
     table_2 = dd.merge(table_0, table_1, on='postcode', how='inner')[COLUMNS_2]
 
     table_2.to_csv("temp_data_2.csv", single_file=True)
