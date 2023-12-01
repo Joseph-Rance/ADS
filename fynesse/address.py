@@ -15,8 +15,8 @@ TAG_NAMES = ["amenity=college", "amenity=nightclub", "building=office", "railway
 def predict_price(latitude, longitude, date, property_type):
 
     dataset = sql_server.query_table(f"SELECT price, latitude, longitude, date_of_transfer, property_type \
-                                       FROM `prices_coordinates_data`
-                                       WHERE 0.0068 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2)
+                                       FROM `prices_coordinates_data` \
+                                       WHERE 0.0068 > POWER(latitude - {latitude}, 2) + POWER(longitude - {longitude}, 2) \
                                              AND ppd_category_type != 'B' AND tenure_type != 'L' \
                                        LIMIT 100;")
 
