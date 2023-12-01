@@ -37,10 +37,10 @@ def plot_poi_data(poi_data, tag_idx, tag_names, ax=plt):
     ax.set_xlabel("distance (log scale)")
     ax.set_ylabel("price (£)")
 
-def plot_country(country, ax=plt):
+def plot_country(country):
 
     world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
-    world[world.name == country].plot(color='white', edgecolor='black', ax=ax)
+    return world[world.name == country].plot(color='white', edgecolor='black')
 
 def scatter_prices_lat_lon(lat_lon_data, bounds, ax=plt):
 
