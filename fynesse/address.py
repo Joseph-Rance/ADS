@@ -1,5 +1,5 @@
 from . import assess
-from . import sql_server, osm
+from .access import sql_server, osm
 
 import datetime
 import numpy as np
